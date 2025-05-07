@@ -24,7 +24,6 @@ const closePopup = (elem) => {
   const modal = elem.closest('.popup');
   modal.classList.toggle('popup_is-opened');
   document.removeEventListener('keyup', handleEscKeyUp);
-  elem.removeEventListener('mousedown', overlayCloseClick);
 };
 
 export { openPopup, closePopup, overlayCloseClick };

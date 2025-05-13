@@ -1,9 +1,4 @@
-import { openPopup } from './modal.js';
-
 const cardTemplateContent = document.querySelector('#card-template').content;
-const popupImg = document.querySelector('.popup_type_image');
-const currentImageCard = popupImg.querySelector('.popup__image');
-const nameCard = popupImg.querySelector('.popup__caption');
 
 const createCard = (cardValue, deleteCard, cardIsLike, cardImgModal) => {
   const cloneCard = cardTemplateContent.querySelector('.card').cloneNode(true);
@@ -19,16 +14,11 @@ const createCard = (cardValue, deleteCard, cardIsLike, cardImgModal) => {
   const cardImage = cloneCard.querySelector('.card__image');
 
   btnLike.addEventListener('click', cardIsLike);
-  cardImage.addEventListener('click', cardImgModal);
+  cardImage.addEventListener('click', () => {
+    cardImgModal(cardValue.name, cardValue.link);
+  });
 
   return cloneCard;
-};
-
-const cardImgModal = (e) => {
-  currentImageCard.src = e.target.src;
-  popupImg.querySelector('img').alt = e.target.alt;
-  openPopup(popupImg);
-  nameCard.textContent = e.currentTarget.closest('.card').querySelector('.card__title').textContent;
 };
 
 const cardIsLike = (e) => {
@@ -40,4 +30,4 @@ const deleteCard = (item) => {
   currentCard.remove();
 };
 
-export { createCard, deleteCard, cardIsLike, cardImgModal };
+export { createCard, deleteCard, cardIsLike };

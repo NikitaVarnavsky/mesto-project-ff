@@ -2,7 +2,7 @@ import './pages/index.css';
 import { initialCards } from './scripts/cards.js';
 
 import { openPopup, closePopup, overlayCloseClick } from './components/modal.js';
-import { createCard, deleteCard, cardIsLike, cardImgModal } from './components/card.js';
+import { createCard, deleteCard, cardIsLike } from './components/card.js';
 
 const cardsList = document.querySelector('.places__list');
 
@@ -20,6 +20,10 @@ const formNewPlace = popupNewCard.querySelector('[name="new-place"]');
 const inputNamePlace = popupNewCard.querySelector('.popup__form input[name="place-name"]');
 const inputLinkPlace = popupNewCard.querySelector('.popup__form input[name="link"]');
 
+const popupImg = document.querySelector('.popup_type_image');
+const currentImageCard = popupImg.querySelector('.popup__image');
+const nameCard = popupImg.querySelector('.popup__caption');
+
 const allPopup = document.querySelectorAll('.popup');
 
 const addListenerClose = (elem) => {
@@ -32,6 +36,13 @@ const btnCloseClick = (elem) => {
   if (elem.target.classList.contains('popup__close')) {
     closePopup(elem.target);
   }
+};
+
+const cardImgModal = (name, link) => {
+  currentImageCard.src = link;
+  popupImg.querySelector('.popup__image').alt = name;
+  openPopup(popupImg);
+  nameCard.textContent = name;
 };
 
 allPopup.forEach((item) => {

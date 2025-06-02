@@ -25,7 +25,7 @@ const setEventListener = (formElement, configValidation) => {
     inputElement.addEventListener('input', () => {
       isValid(formElement, inputElement, configValidation);
       toggleButtonState(inputList, buttonElement, configValidation);
-    });
+    });   
   });
 };
 
@@ -61,6 +61,7 @@ const toggleButtonState = (inputList, buttonElement, configValidation) => {
 };
 
 export const enableValidation = (configValidation) => {
+  
   const formList = Array.from(document.querySelectorAll(`${configValidation.formSelector}`));
 
   formList.forEach((form) => {

@@ -133,6 +133,7 @@ profileEdit.addEventListener('click', (e) => {
 });
 
 profileAdd.addEventListener('click', (e) => {
+  clearValidation(formNewPlace, configValidation);
   openPopup(popupNewCard);
 });
 
@@ -142,36 +143,41 @@ currentImgProfile.addEventListener('click', (e) => {
 
 formImgProfile.addEventListener('submit', (e) => {
   e.preventDefault();
+  let isLoading = true;
   currentImgProfile.style['background-image'] = `url(${inputImgProfile.value})`;
-  e.target.querySelector('.popup__button').textContent = 'Сохранение...';
-
+  onLoading(isLoading, e.target);
   setProfile(inputImgProfile.value)
     .then(() => {
       inputImgProfile.value = '';
       closePopup(newImg);
     })
     .finally(() => {
-      e.target.querySelector('.popup__button').textContent = 'Сохранить';
+      isLoading = false;
+      onLoading(false, e.target);
     });
 });
 
 formEditProfile.addEventListener('submit', (e) => {
   e.preventDefault();
+  let isLoading = true;
   profileTitleValue.textContent = inputName.value;
   profileDescription.textContent = inputDescription.value;
-  e.target.querySelector('.popup__button').textContent = 'Сохранение...';
+  onLoading(isLoading, e.target);
+
   submitDataProfile(inputName.value, inputDescription.value)
     .then(() => {
       closePopup(popupEdit);
     })
     .finally(() => {
-      e.target.querySelector('.popup__button').textContent = 'Сохранить';
+      isLoading = false;
+      onLoading(isLoading, e.target);
     });
 });
 
 formNewPlace.addEventListener('submit', (e) => {
   e.preventDefault();
-  e.target.querySelector('.popup__button').textContent = 'Сохранение...';
+  let isLoading = true;
+  onLoading(isLoading, e.target);
   const dataNewCard = {};
   addCard(inputNamePlace.value, inputLinkPlace.value)
     .then((res) => {
@@ -200,7 +206,8 @@ formNewPlace.addEventListener('submit', (e) => {
       closePopup(popupNewCard);
     })
     .finally(() => {
-      e.target.querySelector('.popup__button').textContent = 'Сохранить';
+      isLoading = false;
+      onLoading(isLoading, e.target);
     });
 });
 
@@ -222,6 +229,12 @@ const confirmDelete = (cardId, cardElement) => {
     id: cardId,
     cardElement,
   };
+};
+
+const onLoading = (isLoading, button) => {
+  isLoading
+    ? (button.querySelector('.popup__button').textContent = 'Сохранение...')
+    : (button.querySelector('.popup__button').textContent = 'Сохранить');
 };
 
 enableValidation(configValidation);

@@ -13,22 +13,13 @@ const createCard = (
   profileName,
   confirmDelete,
 ) => {
-  // console.log(cardValue);
-  // console.log(cardIsLike);
-  // console.log(isLiked);
-  // console.log(addLike);
-  // console.log(removeLike);
-  // console.log(cardImgModal);
-  // console.log(cardLikes);
-  // console.log(ownerName);
-  // console.log(profileName);
-  // console.log(confirmDelete);
-
   const cloneCard = cardTemplateContent.querySelector('.card').cloneNode(true);
-  cloneCard.querySelector('.card__image').src = cardValue.link;
-  cloneCard.querySelector('.card__image').alt = `Фотография места: ${cardValue.name}`;
+  const cardImg = cloneCard.querySelector('.card__image');
+  const quantityLikes = cloneCard.querySelector('.quantity__likes');
+  cardImg.src = cardValue.link;
+  cardImg.alt = `Фотография места: ${cardValue.name}`;
   cloneCard.querySelector('.card__title').textContent = cardValue.name;
-  cloneCard.querySelector('.quantity__likes').textContent = cardLikes.length;
+  quantityLikes.textContent = cardLikes.length;
 
   //Удаление карточки
   const btnDeleteCard = cloneCard.querySelector('.card__delete-button');
@@ -41,7 +32,6 @@ const createCard = (
   });
 
   const btnLike = cloneCard.querySelector('.card__like-button');
-  const cardImage = cloneCard.querySelector('.card__image');
   if (isLiked) {
     btnLike.classList.add('card__like-button_is-active');
   }
@@ -51,20 +41,20 @@ const createCard = (
   btnLike.addEventListener('click', (e) => {
     if (!btnLike.classList.contains('card__like-button_is-active')) {
       addLike(cardValue._id).then((result) => {
-        cloneCard.querySelector('.quantity__likes').textContent = result.likes.length;
+        quantityLikes.textContent = result.likes.length;
         counterLike++;
       });
       cardIsLike(e);
     } else {
       removeLike(cardValue._id).then((result) => {
         counterLike--;
-        cloneCard.querySelector('.quantity__likes').textContent = counterLike;
+        quantityLikes.textContent = counterLike;
       });
       cardIsLike(e);
     }
   });
 
-  cardImage.addEventListener('click', () => {
+  cardImg.addEventListener('click', () => {
     cardImgModal(cardValue.name, cardValue.link);
   });
 

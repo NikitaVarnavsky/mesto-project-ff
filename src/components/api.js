@@ -6,16 +6,20 @@ const config = {
   },
 };
 
+const getResponseData = (result) => {
+  if (result.ok) {
+    return result.json();
+  }
+  return Promise.reject(`Ошибка: ${result.status}`);
+};
+
 // Получение карточек
 
 export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
+  }).then((result) => {
+    return getResponseData(result);
   });
 };
 
@@ -24,11 +28,8 @@ export const getInitialCards = () => {
 export const getInitialUser = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
+  }).then((result) => {
+    return getResponseData(result);
   });
 };
 
@@ -42,11 +43,8 @@ export const submitDataProfile = (name, about) => {
       name: `${name}`,
       about: `${about}`,
     }),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
+  }).then((result) => {
+    return getResponseData(result);
   });
 };
 
@@ -60,11 +58,8 @@ export const addCard = (name, link) => {
       name: `${name}`,
       link: `${link}`,
     }),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
+  }).then((result) => {
+    return getResponseData(result);
   });
 };
 
@@ -83,11 +78,8 @@ export const addLike = (id) => {
   return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     method: 'PUT',
     headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
+  }).then((result) => {
+    return getResponseData(result);
   });
 };
 

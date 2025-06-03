@@ -58,45 +58,41 @@ let userId;
 let cardForDelete = {};
 
 // Получение данных пользователя
-const initialUser = () => {
-  return getInitialUser()
-    .then((result) => {
-      userId = result._id;
-      profileTitleValue.textContent = result.name;
-      profileDescription.textContent = result.about;
-      profileImage.style['background-image'] = `url(${result.avatar})`;
-    })
-    .catch((err) => `Ошибка: ${err}`);
+
+const initialUser = (result) => {
+  userId = result._id;
+  profileTitleValue.textContent = result.name;
+  profileDescription.textContent = result.about;
+  profileImage.style['background-image'] = `url(${result.avatar})`;
 };
 
 // Рендер карточек
 
-const initialCards = () => {
-  return getInitialCards()
-    .then((result) => {
-      result.forEach((item) => {
-        const isLiked = item.likes.some((like) => like._id === userId);
-        const card = createCard(
-          item,
-          deleteCard,
-          cardIsLike,
-          isLiked,
-          addLike,
-          removeLike,
-          cardImgModal,
-          item.likes,
-          item.owner.name,
-          profileTitleValue.textContent,
-          confirmDelete,
-        );
-        cardsList.append(card);
-      });
-    })
-    .catch((err) => `Ошибка: ${err}`);
+const initialCards = (result) => {
+  result.forEach((item) => {
+    const isLiked = item.likes.some((like) => like._id === userId);
+    const card = createCard(
+      item,
+      deleteCard,
+      cardIsLike,
+      isLiked,
+      addLike,
+      removeLike,
+      cardImgModal,
+      item.likes,
+      item.owner.name,
+      profileTitleValue.textContent,
+      confirmDelete,
+    );
+    cardsList.append(card);
+  });
 };
 
-Promise.all([initialUser(), initialCards()])
+Promise.all([getInitialUser(), getInitialCards()])
   .then((result) => {
+    const [userData, cardsData] = result;
+    initialUser(userData);
+    initialCards(cardsData);
     return result;
   })
   .catch((err) => `Ошибка: ${err}`);
@@ -133,11 +129,15 @@ profileEdit.addEventListener('click', (e) => {
 });
 
 profileAdd.addEventListener('click', (e) => {
+  inputNamePlace.value = '';
+  inputLinkPlace.value = '';
   clearValidation(formNewPlace, configValidation);
   openPopup(popupNewCard);
 });
 
 currentImgProfile.addEventListener('click', (e) => {
+  inputImgProfile.value = '';
+  clearValidation(formImgProfile, configValidation);
   openPopup(newImg);
 });
 
@@ -151,6 +151,7 @@ formImgProfile.addEventListener('submit', (e) => {
       inputImgProfile.value = '';
       closePopup(newImg);
     })
+    .catch((err) => console.log(err))
     .finally(() => {
       isLoading = false;
       onLoading(false, e.target);
@@ -160,14 +161,14 @@ formImgProfile.addEventListener('submit', (e) => {
 formEditProfile.addEventListener('submit', (e) => {
   e.preventDefault();
   let isLoading = true;
-  profileTitleValue.textContent = inputName.value;
-  profileDescription.textContent = inputDescription.value;
   onLoading(isLoading, e.target);
-
   submitDataProfile(inputName.value, inputDescription.value)
     .then(() => {
+      profileTitleValue.textContent = inputName.value;
+      profileDescription.textContent = inputDescription.value;
       closePopup(popupEdit);
     })
+    .catch((err) => console.log(err))
     .finally(() => {
       isLoading = false;
       onLoading(isLoading, e.target);
@@ -205,6 +206,7 @@ formNewPlace.addEventListener('submit', (e) => {
 
       closePopup(popupNewCard);
     })
+    .catch((err) => console.log(err))
     .finally(() => {
       isLoading = false;
       onLoading(isLoading, e.target);

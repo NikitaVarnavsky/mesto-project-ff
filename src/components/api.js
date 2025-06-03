@@ -69,6 +69,8 @@ export const removeCard = (id) => {
   return fetch(`${config.baseUrl}/cards/${id}`, {
     method: 'DELETE',
     headers: config.headers,
+  }).then((result) => {
+    return getResponseData(result);
   });
 };
 
@@ -88,6 +90,8 @@ export const removeLike = (id) => {
   return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     method: 'DELETE',
     headers: config.headers,
+  }).then((result) => {
+    return getResponseData(result);
   });
 };
 
@@ -100,5 +104,7 @@ export const setProfile = (avatar) => {
     body: JSON.stringify({
       avatar: `${avatar}`,
     }),
+  }).then((result) => {
+    return getResponseData(result);
   });
 };

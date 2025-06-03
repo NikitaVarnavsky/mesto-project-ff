@@ -40,16 +40,20 @@ const createCard = (
 
   btnLike.addEventListener('click', (e) => {
     if (!btnLike.classList.contains('card__like-button_is-active')) {
-      addLike(cardValue._id).then((result) => {
-        quantityLikes.textContent = result.likes.length;
-        counterLike++;
-      });
+      addLike(cardValue._id)
+        .then((result) => {
+          quantityLikes.textContent = result.likes.length;
+          counterLike++;
+        })
+        .catch((err) => `Ошибка: ${err}`);
       cardIsLike(e);
     } else {
-      removeLike(cardValue._id).then((result) => {
-        counterLike--;
-        quantityLikes.textContent = counterLike;
-      });
+      removeLike(cardValue._id)
+        .then((result) => {
+          counterLike--;
+          quantityLikes.textContent = counterLike;
+        })
+        .catch((err) => `Ошибка: ${err}`);
       cardIsLike(e);
     }
   });
